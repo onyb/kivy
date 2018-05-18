@@ -221,6 +221,7 @@ skip_cython = False
 if platform in ('ios', 'android'):
     print('\nCython check avoided.')
     skip_cython = True
+    from distutils.command.build_ext import build_ext
 else:
     try:
         # check for cython
@@ -241,10 +242,6 @@ else:
             sleep(1)
     except ImportError:
         print("\nCython is missing, it's required for compiling kivy !\n\n")
-        raise
-
-if not have_cython:
-    from distutils.command.build_ext import build_ext
 
 # -----------------------------------------------------------------------------
 # Setup classes
@@ -1097,10 +1094,10 @@ if not build_examples:
             'Topic :: Software Development :: User Interfaces'],
         dependency_links=[
             'https://github.com/kivy-garden/garden/archive/master.zip'],
-        install_requires=['Kivy-Garden>=0.1.4', 'docutils', 'pygments'] +  ['cython>=' + MIN_CYTHON_STRING] if not skip_cython else [],
+        install_requires=['Kivy-Garden>=0.1.4', 'docutils', 'pygments'],
         setup_requires=[
             'cython>=' + MIN_CYTHON_STRING
-        ] if not skip_cython else [])
+        ] if not skip_cython and not have_cython else [])
 else:
     setup(
         name='Kivy-examples',
